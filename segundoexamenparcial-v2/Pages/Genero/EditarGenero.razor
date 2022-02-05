@@ -1,0 +1,44 @@
+@page "/EditarGenero/{Id}"
+@inject NavigationManager NavigationManager
+@using segundoexamenparcial_v2.Modelo;
+@using segundoexamenparcial_v2.Servicio;
+@inject ServicioGenero serv;
+
+<h3>Editar genero</h3>
+
+ <div class="row">
+    <div class="col-md-8">
+    <EditForm Model="@obj" OnValidSubmit="@ActualizarGenero">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="form-group">
+                <label for="Descripcion" class="control-label">Descripción</label>
+                <InputText id="Descripcion" class="form-control" @bind-Value="obj.Descripcion"/>
+            </div>
+            <button type="submit" class="btn btn-primary" >Guardar</button>
+            <button type="button" class="btn btn-primary" @onclick="@Cancelar" >Cancelar</button>
+    </EditForm> 
+    </div>
+ </div>
+
+
+
+
+@code {
+
+    [Parameter]
+    public string Id {get; set;}
+    Genero obj = new Genero();
+
+    protected override void OnInitialized() {
+        obj = serv.Obtener(int.Parse(Id));
+    }
+    protected void ActualizarGenero() {
+        serv.Actualizar(obj);
+        NavigationManager.NavigateTo("Genero");
+    }
+    protected void Cancelar() {
+       NavigationManager.NavigateTo("Generos");
+    }
+
+}

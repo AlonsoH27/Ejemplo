@@ -1,0 +1,72 @@
+@page "/EliminarPeliculaActorRol/{Id}"
+@inject NavigationManager NavigationManager
+@using segundoexamenparcial_v2.Modelo;
+@using segundoexamenparcial_v2.Servicio;
+@inject ServicioPeliculaActorRol serv;
+@inject ServicioPelicula servPel;
+@inject ServicioActores servAct;
+@inject ServicioRoles servRol;
+
+
+<h3>Eliminar pelicula-actor-rol</h3>
+<hr>
+<h3>¿Estas seguro que desas Eliminar? </h3>
+
+
+ <div class="row">
+    <div class="col-md-8">
+    <EditForm Model="@obj">
+        <fieldset disabled="true">
+            <div class="form-group">
+                <label for="PeliculaId" class="control-label">Pelicula Id</label>
+                <InputNumber id="PeliculaId" class="form-control" @bind-Value="obj.PeliculaId"/>
+            </div>
+            <div class="form-group">
+                <label for="ActorId" class="control-label">Actor Id </label>
+                <InputNumber id="ActorId" class="form-control" @bind-Value="obj.ActorId"/>
+            </div>
+            <div class="form-group">
+                <label for="RolId" class="control-label">Rol Id </label>
+                <InputNumber id="RolId" class="form-control" @bind-Value="obj.RolId"/>
+            </div>
+            <div class="form-group">
+                <label for="Personaje" class="control-label">Personaje </label>
+                <InputText id="Personaje" class="form-control" @bind-Value="obj.Personaje"/>
+            </div>
+            <div class="form-group">
+                <label for="Descripcion" class="control-label">Descripción </label>
+                <InputText id="Descripcion" class="form-control" @bind-Value="obj.Descripcion"/>
+            </div>
+            </fieldset>
+            <button type="submit" class="btn btn-primary" @onclick="EliminarPelActRol">Eliminar</button>
+            <button type="button" class="btn btn-primary" @onclick="@Cancelar" >Cancelar</button>
+    </EditForm> 
+    </div>
+ </div>
+
+
+@code {
+    [Parameter]
+    public string Id {get; set;}
+    PeliculaActorRol obj = new PeliculaActorRol();
+    List<Pelicula> objPel;
+    List<Actor> objAct;
+    List<Rol> objRol;
+
+    protected void EliminarPelActRol() {
+        serv.Eliminar(obj);
+        NavigationManager.NavigateTo("PeliculaActorRoles");
+    }
+    protected void Cancelar() {
+       NavigationManager.NavigateTo("PeliculaActorRoles");
+    }
+
+    protected override void OnInitialized()
+    {
+        obj = serv.Obtener(int.Parse(Id));
+        objPel = servPel.obtenerTodo("");
+        objAct = servAct.obtenerTodo("");
+        objRol = servRol.obtenerTodo("");
+    }
+
+}
